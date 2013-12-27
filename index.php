@@ -29,7 +29,7 @@ function dbconnect( $database ) {
 		global $_GET;
 		if ( $_GET['format'] == "cssmarker" && $_GET['bold'] === '0' )
 			$css = str_replace( "font-weight: bold", "font-weight: normal", $css );
-		if ( $_GET['format'] == "cssmarker" && !$_GET['nocompress'] ) {
+		if ( $_GET['format'] == "cssmarker" && ( !array_key_exists( 'nocompress', $_GET ) || !$_GET['nocompress'] ) ) {
 		return preg_replace( "!/\*.*?\*/!", "", str_replace( array( "{ ", "; }", "; ", ": ", "\n", "\t", "  " ), array( "{", "}", ";", ":" ), $css ) );
 		} else {
 		return $css;
@@ -48,7 +48,7 @@ if ( !preg_match( "/^([-_a-zA-Z]+@[_a-z]*(wiki|wikiversity|wiktionary|wikiqoute|
 // if cssmarker-output format is choosen, check wheter it is given and valid, if not die
 if ( !preg_match( "/\\w/", $_GET['localuser'] ) && ( $_GET['format'] == "cssmarker" ) ) die( "invalid localised username" );
 // if no caching time in minutes is given, three days are used (60*24*3)
-if ( !$_GET['cache'] ) $cache = 60 * 60 * 24 * 3; else $cache = $_GET['cache'];
+if ( !array_key_exists( 'cache', $_GET ) || !$_GET['cache'] ) $cache = 60 * 60 * 24 * 3; else $cache = $_GET['cache'];
 // check if the cache format is ok, if not die
 if ( !preg_match( "/^[0-9]+$/", $cache ) ) die( "invalid cache format" );
 
@@ -80,6 +80,9 @@ if ( file_exists( "cache/$queryhash" ) ) {
 
 // seperate the different queries
 $querys = explode( "|", $_GET['query'] );
+
+// Initialize output.
+$output = '';
 
 // for each query do
 for ( $h = 0; $h < sizeof( $querys ); ++$h ) {
