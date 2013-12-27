@@ -44,7 +44,7 @@ $avaibleFormats = array( "jsarenc", "wikilist", "cssmarker" );
 // check if the output format is avaible, if not die
 if ( !in_array( $_GET['format'], $avaibleFormats ) ) die( "no valid output format" );
 // check if the query is ok, if not die
-if ( !preg_match( "/^([-_a-zA-Z]+@[_a-z]*(wiki|wikiversity|wiktionary|wikiqoute|wikisource|wikinews|wikimedia)(@[-_a-zA-Z+]+)?\\|?)+$/", $_GET['query'] ) ) die( "query not valid" );
+if ( !preg_match( "/^([-_a-zA-Z]+@[_a-z]*(wiki|wikiversity|wiktionary|wikiqoute|wikisource|wikinews|wikivoyage|wikimedia)(@[-_a-zA-Z+]+)?\\|?)+$/", $_GET['query'] ) ) die( "query not valid" );
 // if cssmarker-output format is choosen, check wheter it is given and valid, if not die
 if ( !preg_match( "/\\w/", $_GET['localuser'] ) && ( $_GET['format'] == "cssmarker" ) ) die( "invalid localised username" );
 // if no caching time in minutes is given, three days are used (60*24*3)
