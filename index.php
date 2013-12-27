@@ -45,7 +45,7 @@ if (!in_array($_GET['format'], $avaibleFormats)) die("no valid output format");
 // check if the query is ok, if not die
 if (!preg_match("/^([-_a-zA-Z]+@[_a-z]*(wiki|wikiversity|wiktionary|wikiqoute|wikisource|wikinews|wikimedia)(@[-_a-zA-Z+]+)?\\|?)+$/", $_GET['query'])) die("query not valid");
 // if cssmarker-output format is choosen, check wheter it is given and valid, if not die
-if (!preg_match("/\\w/", $_GET['localuser']) && ($_GET['format'] == cssmarker)) die("invalid localised username");
+if (!preg_match("/\\w/", $_GET['localuser']) && ($_GET['format'] == "cssmarker")) die("invalid localised username");
 // if no caching time in minutes is given, three days are used (60*24*3)
 if (!$_GET['cache']) $cache = 60*60*24*3; else $cache = $_GET['cache'];
 // check if the cache format is ok, if not die
@@ -88,6 +88,9 @@ for($h = 0; $h < sizeof($querys); ++$h) {
         // for writing things easier
         $group = $query[0];
         $wiki = $query[1];
+        if (!ctype_alpha($wiki)) die("Bad wiki name");
+        if (!ctype_alpha($group)) die("Bad group name");
+        
         $marker[$wiki."-".$group] = $query[2];
         
         // create an empty array for users
