@@ -3,11 +3,12 @@
 // connects to the database of a given wiki
 function dbconnect( $database ) {
         // connect
-        $mycnf = parse_ini_file( "/home/" . get_current_user() . "/.my.cnf" );
+        $ts_pw = posix_getpwuid( posix_getuid() );
+        $mycnf = parse_ini_file( $ts_pw['dir'] . "/replica.my.cnf" );
         $username = $mycnf['user'];
         $password = $mycnf['password'];
         unset( $mycnf );
-        $con = mysql_connect( $database . '.db.toolserver.org', $username, $password )
+        $con = mysql_connect( $database . '.labsdb', $username, $password )
                 or print '<p class="fail"><strong>Database server login failed.</strong> '
                          . ' This is probably a temporary problem with the server and will be fixed soon. '
                          . ' The server returned: ' . mysql_error() . '</p>';
@@ -16,7 +17,7 @@ function dbconnect( $database ) {
 
         // select database
         if ( $con ) {
-                mysql_select_db( str_replace( '-', '_', $database ) )
+                mysql_select_db( $database . '_p' )
                         or print '<p class="fail"><strong>Database connection failed: '
                                  . mysql_error() . '</strong></p>';
         }
@@ -97,7 +98,7 @@ for ( $h = 0; $h < sizeof( $querys ); ++$h ) {
         $users = array();
 
         // connect to the appropiate database
-        $con = dbconnect( $wiki . '-p' );
+        $con = dbconnect( $wiki );
         $result = mysql_query( 'SELECT user_name from user left join user_groups on user_id=ug_user where ug_group = \'' . $group . '\';' );
         while ( $row = mysql_fetch_array( $result, MYSQL_NUM ) ) {
                 $users[] = $row[0];
