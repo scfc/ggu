@@ -68,10 +68,10 @@ switch ( $_GET['format'] ) {
 
 if ( $cache < 60 * 60 * 24 ) {
 	header( "Expires: " . gmdate( "D, d M Y H:i:s", time() + $cache ) . " GMT" );
-	header( "Cache-Control: max-age=" . $cache . " GMT" );
+	header( "Cache-Control: max-age=" . $cache );
 } else {
 	header( "Expires: " . gmdate( "D, d M Y H:i:s", time() + ( 60 * 60 * 24 ) ) . " GMT" );
-	header( "Cache-Control: max-age=" . ( 60 * 60 * 24 ) . " GMT" );
+	header( "Cache-Control: max-age=" . ( 60 * 60 * 24 ) );
 }
 
 if ( file_exists( "cache/$queryhash" ) ) {
